@@ -3,7 +3,7 @@ package com.test.service;
 import java.util.List;
 import java.util.Map;
 
-import com.test.entity.Location;
+import com.test.entity.LocationConfig;
 
 /**
  * @author (作者) zhangyd-c 2015年7月31日 下午6:05:16
@@ -18,9 +18,9 @@ public interface ILocationService {
 	 * @param parentAreaCode
 	 * @return
 	 */
-	public List<Location> queryListByParentAreaCode(String parentAreaCode);
+	public List<LocationConfig> queryListByParentAreaCode(String parentAreaCode);
 
-	public List<Location> getAllLocation(@SuppressWarnings("rawtypes") Map map);
+	public List<LocationConfig> getAllLocation(@SuppressWarnings("rawtypes") Map map);
 
 	/**
 	 * 
@@ -29,7 +29,7 @@ public interface ILocationService {
 	 * @date 2015年4月30日 下午2:01:34
 	 * @return
 	 */
-	public List<Location> selectAllProvinces();
+	public List<LocationConfig> selectAllProvinces();
 
 	/**
 	 * 
@@ -38,7 +38,7 @@ public interface ILocationService {
 	 * @date 2015年4月30日 下午2:02:40
 	 * @return
 	 */
-	public List<Location> selectAllCitys();
+	public List<LocationConfig> selectAllCitys();
 
 	/**
 	 * 根据areaCode查询地区信息
@@ -46,13 +46,13 @@ public interface ILocationService {
 	 * @param areaCode
 	 * @return
 	 */
-	public Location queryLocationByAreaCode(String areaCode);
+	public LocationConfig queryLocationByAreaCode(String areaCode);
 
-	public List<Location> selectProvince();
+	public List<LocationConfig> selectProvince();
 
-	public List<Location> selectProvinceList();
+	public List<LocationConfig> selectProvinceList();
 
-	public List<Location> getAreasByCompanyId(Long companyId);
+	public List<LocationConfig> getAreasByCompanyId(Long companyId);
 
 	/**
 	 * 根据名称获取对应的市的编码

@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @version (版本) V1.0
  * @since (该版本支持的JDK版本) ： 1.7
  */
-public class Dictionary implements Serializable {
+public class DictionaryConfig implements Serializable {
 
 	/** @Fields serialVersionUID: */
 
@@ -25,14 +25,14 @@ public class Dictionary implements Serializable {
 
 	private Boolean isUsing;
 
-	public Dictionary(Long id, String name, String code, String typeName, String typeCode, Boolean isUsing) {
+	public DictionaryConfig(Long id, String name, String code, String typeName, String typeCode, Boolean isUsing) {
 		super();
 		this.code = code;
 		this.typeCode = typeCode;
 		this.isUsing = isUsing;
 	}
 
-	public Dictionary() {
+	public DictionaryConfig() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -90,13 +90,13 @@ public class Dictionary implements Serializable {
 		if (this == obj) {
 			return true;
 		}
-		if (!(obj instanceof Dictionary)) {
+		if (!(obj instanceof DictionaryConfig)) {
 			return false;
 		}
 		/*
 		 * if(this.getClass()!=obj.getClass()){ return false; }
 		 */
-		final Dictionary d = (Dictionary) obj;
+		final DictionaryConfig d = (DictionaryConfig) obj;
 		if (this.code.trim().equals(d.getCode().trim()) && this.typeCode.trim().equals(d.getTypeCode().trim())) {
 			return true;
 		}

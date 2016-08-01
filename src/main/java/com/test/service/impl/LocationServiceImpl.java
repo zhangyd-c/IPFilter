@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.test.dao.ILocationDao;
-import com.test.entity.Location;
+import com.test.entity.LocationConfig;
 import com.test.service.ILocationService;
 
 /**
@@ -28,12 +28,12 @@ public class LocationServiceImpl implements ILocationService {
 	 * @return
 	 */
 	@Override
-	public List<Location> queryListByParentAreaCode(String parentAreaCode) {
+	public List<LocationConfig> queryListByParentAreaCode(String parentAreaCode) {
 		return locationDao.selectListByParentAreaCode(parentAreaCode);
 	}
 
 	@Override
-	public List<Location> getAllLocation(@SuppressWarnings("rawtypes") Map map) {
+	public List<LocationConfig> getAllLocation(@SuppressWarnings("rawtypes") Map map) {
 		return locationDao.selectAllLocationPage(map);
 	}
 
@@ -45,7 +45,7 @@ public class LocationServiceImpl implements ILocationService {
 	 * @return
 	 */
 	@Override
-	public List<Location> selectAllProvinces() {
+	public List<LocationConfig> selectAllProvinces() {
 		return locationDao.selectAllProvinces();
 	}
 
@@ -57,7 +57,7 @@ public class LocationServiceImpl implements ILocationService {
 	 * @return
 	 */
 	@Override
-	public List<Location> selectAllCitys() {
+	public List<LocationConfig> selectAllCitys() {
 		return locationDao.selectAllCitys();
 	}
 
@@ -68,22 +68,22 @@ public class LocationServiceImpl implements ILocationService {
 	 * @return
 	 */
 	@Override
-	public Location queryLocationByAreaCode(String areaCode) {
+	public LocationConfig queryLocationByAreaCode(String areaCode) {
 		return locationDao.selectByPrimaryKey(areaCode);
 	}
 
 	@Override
-	public List<Location> selectProvince() {
+	public List<LocationConfig> selectProvince() {
 		return locationDao.selectProvince();
 	}
 
 	@Override
-	public List<Location> selectProvinceList() {
+	public List<LocationConfig> selectProvinceList() {
 		return locationDao.selectProvinceList();
 	}
 
 	@Override
-	public List<Location> getAreasByCompanyId(Long companyId) {
+	public List<LocationConfig> getAreasByCompanyId(Long companyId) {
 		return locationDao.getAreasByCompanyId(companyId);
 	}
 

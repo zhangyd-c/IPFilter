@@ -11,7 +11,7 @@ import java.util.List;
  * @version (版本) V1.0
  * @since (该版本支持的JDK版本) ： 1.7
  */
-public class Location {
+public class LocationConfig {
 	private String areaCode;
 
 	private String name;
@@ -47,17 +47,17 @@ public class Location {
 	// 以下字段与数据库不对应
 
 	// 非表字段
-	private List<Location> childList = new ArrayList<Location>();
+	private List<LocationConfig> childList = new ArrayList<LocationConfig>();
 
 	private String parentAreaName;
 
-	private List<Location> childs;
+	private List<LocationConfig> childs;
 
-	public List<Location> getChilds() {
+	public List<LocationConfig> getChilds() {
 		return childs;
 	}
 
-	public void setChilds(List<Location> childs) {
+	public void setChilds(List<LocationConfig> childs) {
 		this.childs = childs;
 	}
 
@@ -157,11 +157,11 @@ public class Location {
 		this.searchable = searchable;
 	}
 
-	public List<Location> getChildList() {
+	public List<LocationConfig> getChildList() {
 		return childList;
 	}
 
-	public void setChildList(List<Location> childList) {
+	public void setChildList(List<LocationConfig> childList) {
 		this.childList = childList;
 	}
 

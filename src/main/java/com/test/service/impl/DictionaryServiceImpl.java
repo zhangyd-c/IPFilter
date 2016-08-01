@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.test.dao.IDictionaryDao;
-import com.test.entity.Dictionary;
+import com.test.entity.DictionaryConfig;
 import com.test.service.IDictionaryService;
 
 /**
@@ -28,7 +28,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
 	 * @return
 	 */
 	@Override
-	public List<Dictionary> getDictionaryList(Dictionary dictionary) {
+	public List<DictionaryConfig> getDictionaryList(DictionaryConfig dictionary) {
 		return dictionaryDao.getDictionaryList(dictionary);
 	}
 }

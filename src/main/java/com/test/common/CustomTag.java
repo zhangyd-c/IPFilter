@@ -11,7 +11,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  * @version (版本) V1.0
  * @since (该版本支持的JDK版本) ： 1.7
  */
-public class GldTag extends TagSupport {
+public class CustomTag extends TagSupport {
 	/**
 	 * 
 	 */

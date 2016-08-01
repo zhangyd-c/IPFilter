@@ -2,7 +2,7 @@ package com.test.dao;
 
 import java.util.List;
 
-import com.test.entity.Dictionary;
+import com.test.entity.DictionaryConfig;
 
 /**
  * @author (作者) zhangyd-c 2015年7月31日 下午6:00:10 
@@ -11,5 +11,5 @@ import com.test.entity.Dictionary;
  */
 public interface IDictionaryDao {
     
-    List<Dictionary> getDictionaryList(Dictionary dictionary);
+    List<DictionaryConfig> getDictionaryList(DictionaryConfig dictionary);
 }

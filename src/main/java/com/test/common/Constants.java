@@ -12,10 +12,10 @@ public class Constants {
 
 	public static final String MAIL_SERVERPORT = "25";
 
-	/** 邮件发送者的地址 xmxxqt@glodon.com */
+	/** 邮件发送者的地址 */
 	public static final String FROMADDRESS = "rxxzyd1123@163.com";
 
-	/** 登陆邮件发送服务器的用户名和密码 xmxxqt@glodon.com */
+	/** 登陆邮件发送服务器的用户名和密码 */
 	public static final String MAIL_USERNAME = "rxxzyd1123@163.com";
 
 	public static final String MAIL_PASSWORD = "xxxxxx";

@@ -2,7 +2,7 @@ package com.test.service;
 
 import java.util.List;
 
-import com.test.entity.Dictionary;
+import com.test.entity.DictionaryConfig;
 
 /**
  * @Description
@@ -22,6 +22,6 @@ public interface IDictionaryService {
 	 * @param dictionary
 	 * @return
 	 */
-	public List<Dictionary> getDictionaryList(Dictionary dictionary);
+	public List<DictionaryConfig> getDictionaryList(DictionaryConfig dictionary);
 
 }
