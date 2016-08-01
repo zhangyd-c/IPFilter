@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.dao.ILocationDao">
+	<resultMap id="BaseResultMap" type="com.test.entity.Location">
+		<id column="area_code" property="areaCode" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="abbreviation" property="abbreviation" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+		<result column="parent_area_code" property="parentAreaCode"
+			jdbcType="VARCHAR" />
+		<result column="contain_info_price" property="containInfoPrice"
+			jdbcType="BIT" />
+		<result column="area" property="area" jdbcType="VARCHAR" />
+		<result column="searchable" property="searchable" jdbcType="BIT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		area_code, name, sort, remark, abbreviation, created_at,
+		updated_at,
+		parent_area_code,
+		contain_info_price, area, searchable
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from locations
+		where area_code = #{areaCode,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectAllLocationPage" resultMap="BaseResultMap">
+		select
+		area_code,parent_area_code,abbreviation
+		from locations
+		where area_code
+		!= '1' and abbreviation != '全国' and name != '全国'
+	</select>
+
+	<select id="selectListByParentAreaCode" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from locations
+		where parent_area_code =
+		#{parentAreaCode,jdbcType=VARCHAR}
+		order by sort asc
+	</select>
+
+	<select id="selectProvince" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from locations
+		where parent_area_code ='' AND area_code != '1'
+		order by
+		sort asc
+	</select>
+
+	<select id="selectProvinceByAdminId" parameterType="java.util.List"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from locations where
+		<foreach collection="list" separator="or" item="item" index="index">
+			area_code = #{item}
+		</foreach>
+		order by sort asc
+	</select>
+
+	<!-- 获得所有的省 -->
+	<select id="selectAllProvinces" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from locations
+		where parent_area_code ='' AND area_code != '1'
+		order by
+		sort asc
+	</select>
+
+	<!-- 获得所有的市 -->
+	<select id="selectAllCitys" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from locations
+		where parent_area_code !=''
+		order by sort asc
+	</select>
+
+	<select id="selectProvinceList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from locations
+		where parent_area_code =''
+		AND area_code != '1'
+		order by
+		sort asc
+	</select>
+	<select id="getAreasByCompanyId" resultMap="BaseResultMap"
+		parameterType="long">
+		SELECT DISTINCT
+		(lo.area_code),lo.abbreviation,lo.parent_area_code
+		FROM
+		locations lo,
+		(
+		SELECT lo.area_code, lo.parent_area_code
+		FROM company_operating_areas
+		AS coa
+		LEFT JOIN locations AS lo ON ( coa.location_area_code =
+		lo.area_code )
+		WHERE coa.company_id = #{companyId}
+		) base
+		WHERE
+		lo.area_code = base.area_code
+		OR lo.area_code = base.parent_area_code
+	</select>
+
+	<select id="selectLocationsByName" parameterType="map"
+		resultType="string">
+		select lc.area_code
+		from locations l LEFT JOIN locations lc on
+		lc.parent_area_code=l.area_code
+		where lc.parent_id is not null
+		<if test="provinceCode !=null and provinceCode!=''">
+			and l.area_code=#{provinceCode,jdbcType=VARCHAR}
+			and
+			l.area_code=lc.parent_area_code
+		</if>
+		<if test="cityeCode !=null and cityeCode!=''">
+			and lc.area_code=#{cityeCode,jdbcType=VARCHAR}
+			and
+			lc.parent_area_code=l.area_code
+		</if>
+		<if test="provinceName !=null and provinceName!=''">
+			and l.name=#{provinceName,jdbcType=VARCHAR}
+			and
+			l.area_code=lc.parent_area_code
+		</if>
+		<if test="cityeName !=null and cityeName!=''">
+			and lc.name=#{cityeName,jdbcType=VARCHAR}
+			and
+			lc.parent_area_code=l.area_code
+		</if>
+	</select>
+	
+	<select id="selectProvinceNameAndCityName" parameterType="String"
+		resultType="map">
+		select lc.`name` cityName,l.`name` as provinceName
+		from
+		locations l LEFT JOIN locations lc on lc.parent_area_code=l.area_code
+		where lc.area_code=#{code}
+		limit 0,1
+	</select>
+
+	<select id="selectNameByAreaCode" resultType="java.lang.String"
+		parameterType="java.lang.String">
+		select
+		name
+		from locations
+		where area_code = #{areaCode}
+	</select>
+
+</mapper>

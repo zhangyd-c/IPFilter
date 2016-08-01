@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/WEB-INF/sitemesh/">
+	<!-- 此处用来定义不需要过滤的页面 -->
+    <excludes>
+        <pattern>/assets/*</pattern>
+        <pattern>/javascripts/*</pattern>
+        <pattern>/fckeditor/*</pattern>
+        <pattern>/*ajax=true*</pattern>
+        <pattern>*.html</pattern>
+        <pattern>/WEB-INF/exception.jsp</pattern>
+    </excludes>
+	<!-- 用来定义装饰器要过滤的页面 --> 
+    <decorator name="main" page="default.jsp">
+       <!--  <pattern>/WEB-INF/views/companies/*</pattern> -->
+        <pattern>/WEB-INF/views/*</pattern>
+    </decorator>
+</decorators>
+
