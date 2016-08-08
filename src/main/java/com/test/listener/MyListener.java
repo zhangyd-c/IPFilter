@@ -21,6 +21,9 @@ public class MyListener implements ServletContextListener {
 		// IP存储器
 		Map<String,Long[]> ipMap = new HashMap<String,Long[]>();
 		context.setAttribute("ipMap", ipMap);
+		// IP限制存储器：存储被限制的IP信息
+		Map<String,Long> limitedIpMap = new HashMap<String,Long>();
+		context.setAttribute("limitedIpMap", limitedIpMap);
 	}
 
 	@Override

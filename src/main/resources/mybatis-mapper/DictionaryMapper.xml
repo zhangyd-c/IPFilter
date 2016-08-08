@@ -15,7 +15,7 @@
 	</sql>
 
 
-	<select id="getDictionaryList" parameterType="dictionary"
+	<select id="getDictionaryList" parameterType="com.test.entity.DictionaryConfig"
 		resultMap="BaseResultMap" flushCache="false" useCache="true" timeout="100000">
 		SELECT
 			*

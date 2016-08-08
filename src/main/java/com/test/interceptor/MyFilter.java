@@ -1,7 +1,9 @@
 package com.test.interceptor;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -23,6 +25,8 @@ import com.test.util.IPUtil;
  * @since JDK ： 1.7
  */
 public class MyFilter implements Filter {
+	
+	private static final long LIMITED_TIME_MILLIS = 3 * 60 * 1000;
 
 	private FilterConfig config;
 
@@ -38,18 +42,30 @@ public class MyFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		ServletContext context = config.getServletContext();
+		// IP存储器
 		Map<String, Long[]> ipMap = (Map<String, Long[]>) context.getAttribute("ipMap");
+		// IP限制存储器：存储被限制的IP信息
+		Map<String, Long> limitedIpMap = (Map<String, Long>) context.getAttribute("limitedIpMap");
+		filterLimitedIpMap(limitedIpMap);
 		String ip = IPUtil.getIp(request);
+		
+		if(isLimitedIP(limitedIpMap, ip)){
+			request.setAttribute("remainingTime", limitedIpMap.get(ip) - System.currentTimeMillis());
+			request.getRequestDispatcher("/error/overLimitIP").forward(request, response);
+			return;
+		}
 		if (ipMap.containsKey(ip)) {
 			Long[] ipInfo = ipMap.get(ip);
 			Long count = ipInfo[0];
 			ipInfo[0] = count + 1;
 			System.out.println("当前第[" + (count + 1) + "]次访问");
 			if (count >= 20) {
-				Long currentTimeMillis = ipInfo[1];
-				Long a = System.currentTimeMillis() - currentTimeMillis;
-				if (a <= 5000) {
-					response.sendRedirect("/error/overLimitIP");
+				Long ipAccessTime = ipInfo[1];
+				Long currentTimeMillis = System.currentTimeMillis();
+				if (currentTimeMillis - ipAccessTime <= 5000) {
+					limitedIpMap.put(ip, currentTimeMillis + LIMITED_TIME_MILLIS);
+					request.setAttribute("remainingTime", LIMITED_TIME_MILLIS);
+					request.getRequestDispatcher("/error/overLimitIP").forward(request, response);
 					return;
 				} else {
 					initIpVisitsNumber(ipMap, ip);
@@ -67,9 +83,57 @@ public class MyFilter implements Filter {
 	public void destroy() {
 
 	}
+	
+	/**
+	 * @Description 是否是被限制的IP
+	 * @author zhangyd
+	 * @date 2016年8月8日 下午5:39:17 
+	 * @param limitedIpMap
+	 * @param ip
+	 * @return
+	 */
+	private boolean isLimitedIP(Map<String, Long> limitedIpMap, String ip){
+		if(limitedIpMap == null || ip == null){
+			// 没有被限制
+			return false;
+		}
+		Set<String> keys = limitedIpMap.keySet();
+		Iterator<String> keyIt = keys.iterator();
+		while(keyIt.hasNext()){
+			String key = keyIt.next();
+			if(key.equals(ip)){
+				// 被限制的IP
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * @Description 过滤受限的IP，剔除已经到期的限制IP
+	 * @author zhangyd
+	 * @date 2016年8月8日 下午5:34:33 
+	 * @param limitedIpMap
+	 */
+	private void filterLimitedIpMap(Map<String, Long> limitedIpMap){
+		if(limitedIpMap == null){
+			return ;
+		}
+		Set<String> keys = limitedIpMap.keySet();
+		Iterator<String> keyIt = keys.iterator();
+		long currentTimeMillis = System.currentTimeMillis();
+		while(keyIt.hasNext()){
+			long expireTimeMillis = limitedIpMap.get(keyIt.next());
+			if(expireTimeMillis <= currentTimeMillis){
+				keyIt.remove();
+			}
+		}
+		
+	}
 
 	/**
-	 * 初始化用户访问次数
+	 * 初始化用户访问次数和访问时间
 	 * 
 	 * @author zhangyd
 	 * @date 2016年7月29日 上午10:01:39
@@ -78,8 +142,8 @@ public class MyFilter implements Filter {
 	 */
 	private void initIpVisitsNumber(Map<String, Long[]> ipMap, String ip) {
 		Long[] ipInfo = new Long[2];
-		ipInfo[0] = 0L;
-		ipInfo[1] = System.currentTimeMillis();
+		ipInfo[0] = 0L;// 访问次数
+		ipInfo[1] = System.currentTimeMillis();// 初次访问时间
 		ipMap.put(ip, ipInfo);
 	}
 
