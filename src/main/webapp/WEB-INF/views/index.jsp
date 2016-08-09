@@ -2,6 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
+<title>IP访问次数限制首页</title>
 <body>
 	<div
 		style="width: 98%; height: 500px; background-color: white; border: 2px solid gray; border-radius: 5px; padding-top: 20px; padding-left: 10px;">
@@ -19,6 +20,9 @@
 			</c:forEach>
 		</table>
 	</div>
+	<script type="text/javascript">
+		 //window.location.href = "/render/index";
+	</script>
 </body>
 </html>
 

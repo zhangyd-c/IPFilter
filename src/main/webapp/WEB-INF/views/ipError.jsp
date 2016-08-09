@@ -1,6 +1,6 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<title>IP访问次数限制</title>
+<title>IP访问次数限制错误提示页</title>
 <style type="text/css">
    em {
  	 	font-family: "Georgia";
@@ -14,20 +14,22 @@
 	<p>若你是机器人，那你也看不懂，你请便就行；</p>
 	<p>如果不是机器人，那么烦请你先休息1个小时，喝杯咖啡散散步，千万别累着。</p>
 	<c:if test="${remainingTime ne null && remainingTime > 0 }">
-		<p><em>剩余时间(ms)：<span id="remainingTime" style="width: 150px;margin-right: 5px">${remainingTime }</span></em></p>
+		<p><em>剩余时间(s)：<span id="remainingTime">${remainingTime }</span></em></p>
 		<script type="text/javascript">
 			var remainingTimeTag = document.getElementById("remainingTime");
 			window.setInterval(function(){
 				drawing();
-			},0);
+			},1000);
 			function drawing(){
 				var remainingTime = remainingTimeTag.innerHTML;
 				if(remainingTime <= 0){
-					alert("OK，冤家~~~休息够了么？休息够了就tm脱了膀子干！");
+					console.log("OK，冤家~~~休息够了么？休息够了就tm脱了膀子继续干！");
+					setTimeout(function(){
+						window.location.href = "/render/index";
+					},2000)
 					return;
 				}
 				remainingTimeTag.innerHTML = remainingTime - 1;
-				
 			}
 		</script>
 	</c:if>
