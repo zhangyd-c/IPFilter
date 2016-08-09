@@ -70,7 +70,7 @@ public class ArraysUtils {
 		// 测试数据：一个无序的int数组
 		int[] disorderlyArrs = { 3, 1, 1, 2, 3, 5, 6, 78, 3, 4, 5 };
 		int[] orderlyArrs = { 1, 2, 3, 3, 5, 5, 6, 7, 7, 8 };
-
+ 
 		ArraysUtils t = new ArraysUtils();
 		t.findOrderly(orderlyArrs);
 	}
