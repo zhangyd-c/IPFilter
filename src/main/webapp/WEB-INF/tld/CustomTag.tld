@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
- <description>GLD 1.0 library</description>
+ <description>customTag 1.0 library</description>
  <display-name>CustomTag</display-name>
  <tlib-version>1.0</tlib-version>
- <short-name>gld</short-name>
+ <short-name>customTag</short-name>
  <tag>
-  <name>gld</name>
+  <name>customTag</name>
   <tag-class>com.test.common.CustomTag</tag-class>
   <body-content>empty</body-content>
   <attribute>
