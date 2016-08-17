@@ -58,7 +58,7 @@
 	<listener>
 		<listener-class>com.test.listener.MyListener</listener-class>
 	</listener>
-	<!-- 配置监听器 start -->
+	<!-- 配置监听器 end -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
