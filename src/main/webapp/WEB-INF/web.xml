@@ -43,17 +43,22 @@
 		<filter-name>HiddenHttpMethodFilter</filter-name>
 		<servlet-name>appServlet</servlet-name>
 	</filter-mapping>
-	<!-- 我的自定义拦截器 start -->
+	<!-- 配置过滤器 start -->
 	<filter>
-		<filter-name>MyFilter</filter-name>
-		<filter-class>com.test.interceptor.MyFilter</filter-class>
+		<filter-name>IPFilter</filter-name>
+		<filter-class>com.test.interceptor.IPFilter</filter-class>
 	</filter>
 	<filter-mapping>
-		<filter-name>MyFilter</filter-name>
+		<filter-name>IPFilter</filter-name>
 		<url-pattern>/render/*</url-pattern>
 	</filter-mapping>
+	<!-- 配置过滤器 end -->
 	
-	<!-- 我的自定义拦截器 end -->
+	<!-- 配置监听器 start -->
+	<listener>
+		<listener-class>com.test.listener.MyListener</listener-class>
+	</listener>
+	<!-- 配置监听器 start -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
@@ -61,12 +66,6 @@
 		<listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
 	</listener>
 	
-	<!-- 我的自定义监听器 start -->
-	<listener>
-		<listener-class>com.test.listener.MyListener</listener-class>
-	</listener>
-	<!-- 我的自定义监听器 start -->
-
 	<servlet>
 		<servlet-name>appServlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

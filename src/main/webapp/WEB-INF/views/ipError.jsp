@@ -10,7 +10,7 @@
    }
 </style>
 <div style="width: 98%;height: 500px;background-color: aliceblue;border: 2px solid red;border-radius: 5px;padding-top: 20px;padding-left: 10px;">
-	<em>系统检查到您的IP地址在短时间内进行了大量访问</em>
+	<em>系统检查到你的IP地址在短时间内进行了大量访问，因此你的IP暂时被列入“限制访问”名单。</em>
 	<p>若你是机器人，那你也看不懂，你请便就行；</p>
 	<p>如果不是机器人，那么烦请你先休息1个小时，喝杯咖啡散散步，千万别累着。</p>
 	<c:if test="${remainingTime ne null && remainingTime > 0 }">

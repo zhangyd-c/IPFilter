@@ -27,12 +27,12 @@ import com.test.util.IPUtil;
  * @date 2016年7月28日 下午5:54:51
  * @since JDK ： 1.7
  */
-public class MyFilter implements Filter {
+public class IPFilter implements Filter {
 
 	/**
 	 * 默认限制时间（单位：ms）
 	 */
-	private static final long LIMITED_TIME_MILLIS = 60 * 60 * 1000;
+	private static final long LIMITED_TIME_MILLIS = 60 * 1000;
 
 	/**
 	 * 用户连续访问最高阀值，超过该值则认定为恶意操作的IP，进行限制
@@ -77,7 +77,7 @@ public class MyFilter implements Filter {
 		// 判断是否是被限制的IP，如果是则跳到异常页面
 		if (isLimitedIP(limitedIpMap, ip)) {
 			long limitedTime = limitedIpMap.get(ip) - System.currentTimeMillis();
-			// 剩余限制时间
+			// 剩余限制时间(用为从毫秒到秒转化的一定会存在些许误差，但基本可以忽略不计)
 			request.setAttribute("remainingTime", ((limitedTime / 1000) + (limitedTime % 1000 > 0 ? 1 : 0)));
 			request.getRequestDispatcher("/error/overLimitIP").forward(request, response);
 			return;
