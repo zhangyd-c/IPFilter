@@ -12,7 +12,9 @@
     http://www.springframework.org/schema/tx 
     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
     http://www.springframework.org/schema/aop
-    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+    http://www.springframework.org/schema/task    
+    http://www.springframework.org/schema/task/spring-task-3.2.xsd  ">
 	
 	<!-- 加载系统配置文件 -->
      <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -23,8 +25,9 @@
         </property>
     </bean>
 	
-	 <!-- 开启AOP,使用spring的代理 -->
-    <aop:aspectj-autoproxy proxy-target-class="true"/>
+	<context:component-scan base-package="com.test" >
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
 	
 	<!-- mybtis配置 -->
 	<import resource="spring-mybatis.xml"/>
@@ -32,4 +35,8 @@
     <!-- 配置注解事务，事务管理器与数据源在spring-mybatis.xml中 -->
     <tx:annotation-driven transaction-manager="transactionManager" />
    
+   	<!-- 配置定时任务 -->
+   	<task:annotation-driven /> 
+   	
+   	<bean id="SpringContextUtil" class="com.test.util.SpringContextUtil" scope="singleton"></bean>
 </beans>

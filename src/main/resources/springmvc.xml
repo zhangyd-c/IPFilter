@@ -14,9 +14,9 @@
     http://www.springframework.org/schema/aop
     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
-	<!-- 开启AOP -->
+ 	<!-- 开启AOP,使用spring的代理 -->
     <aop:aspectj-autoproxy proxy-target-class="true"/>
-	
+    
 	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">   
         <property name="converters">   
             <list>   
