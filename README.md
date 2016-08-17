@@ -8,7 +8,7 @@
 **我的思路**
 
 工程启动时，创建两个Map，一个（ipMap）用来存放用户Ip和访问时间等主要信息，另一个（limitedIpMap）用来存放被限制的用户IP。Map的key为用户的IP，value为具体内容。当用户访问系统时，通过IPFilter检查limitedIpMap中是否存在当前IP，如果存在说明该IP之前存在过恶意刷新访问，已经被限制，跳转到异常提示页面；如果limitedIpMap中不存在则检查ipMap中是否存在当前IP，如果ipMap中不存在则说明用户初次访问，用户访问次数+1，初始访问时间为当前时间；如果存在则检查用户访问次数是否在规定的短时间内进行了大量的访问操作；如果是，则将当前IP添加到limitedIpMap中，并跳转到异常提示页面，否则不进行操作，直接放行本次请求。
-![简单流程图](http://7xp3a1.com1.z0.glb.clouddn.com/20160803155435148.png)
+![简单流程图](https://github.com/zhangyd-c/IPFilter/blob/master/doc/IPFilter/IPFilterFlowChart.png)
 
 **配置文件**
 
