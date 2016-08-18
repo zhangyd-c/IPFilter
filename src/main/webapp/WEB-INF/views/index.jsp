@@ -12,7 +12,7 @@
 				<th>ip</th>
 				<th>count</th>
 			</tr>
-			<c:forEach items="${applicationScope.ipTable}" var="entry">
+			<c:forEach items="${applicationScope.ipMap}" var="entry">
 				<tr>
 					<td>${entry.key }</td>
 					<td>${entry.value[0] }</td>

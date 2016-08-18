@@ -1,7 +1,7 @@
 package com.test.interceptor;
 
 import java.io.IOException;
-import java.util.Hashtable;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -24,6 +24,8 @@ import com.test.util.IPUtil;
  * @author zhangyd
  * @date 2016年7月28日 下午5:54:51
  * @since JDK ： 1.7
+ * @version 2.0
+ * @modify 改hashMap 为 线程安全的ConcurrentHashMap
  */
 public class IPFilter implements Filter {
 
@@ -59,43 +61,46 @@ public class IPFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
-		
+
 		ServletContext context = config.getServletContext();
 		// 获取限制IP存储器：存储被限制的IP信息
-		Hashtable<String, Long> limitedIpTable = (Hashtable<String, Long>) context.getAttribute("limitedIpTable");
+		ConcurrentHashMap<String, Long> limitedIpMap = (ConcurrentHashMap<String, Long>) context
+				.getAttribute("limitedIpMap");
 		// 获取用户IP
 		String ip = IPUtil.getIp(request);
 		// 判断是否是被限制的IP，如果是则跳到异常页面
-		if (isLimitedIP(limitedIpTable, ip)) {
-			long limitedTime = limitedIpTable.get(ip) - System.currentTimeMillis();
+		if (isLimitedIP(limitedIpMap, ip)) {
+			long limitedTime = limitedIpMap.get(ip) - System.currentTimeMillis();
 			forward(request, response, ((limitedTime / 1000) + (limitedTime % 1000 > 0 ? 1 : 0)));
 			return;
 		}
 		// 获取IP存储器
-		Hashtable<String, Long[]> ipTable = (Hashtable<String, Long[]>) context.getAttribute("ipTable");
+		ConcurrentHashMap<String, Long[]> ipMap = (ConcurrentHashMap<String, Long[]>) context.getAttribute("ipMap");
 
 		// 判断存储器中是否存在当前IP，如果没有则为初次访问，初始化该ip
 		// 如果存在当前ip，则验证当前ip的访问次数
 		// 如果大于限制阀值，判断达到阀值的时间，如果不大于[用户访问最小安全时间]则视为恶意访问，跳转到异常页面
-		if (ipTable.containsKey(ip)) {
-			Long[] ipInfo = ipTable.get(ip);
+		if (ipMap.containsKey(ip)) {
+			Long[] ipInfo = ipMap.get(ip);
 			ipInfo[0] = ipInfo[0] + 1;
 			if (ipInfo[0] > LIMIT_NUMBER) {
 				Long ipAccessTime = ipInfo[1];
 				Long currentTimeMillis = System.currentTimeMillis();
+				// 限制时间内
 				if (currentTimeMillis - ipAccessTime <= MIN_SAFE_TIME) {
-					System.out.println(ip + " 在[" + (currentTimeMillis - ipAccessTime) + "]ms内，共访问了[" + ipInfo[0] + "]次");
-					limitedIpTable.put(ip, currentTimeMillis + LIMITED_TIME_MILLIS);
+					System.out
+							.println(ip + " 在[" + (currentTimeMillis - ipAccessTime) + "]ms内，共访问了[" + ipInfo[0] + "]次");
+					limitedIpMap.put(ip, currentTimeMillis + LIMITED_TIME_MILLIS);
 					forward(request, response, currentTimeMillis + LIMITED_TIME_MILLIS);
 					return;
 				} else {
-					initIpVisitsNumber(ipTable, ip);
+					initIpVisitsNumber(ipMap, ip);
 				}
 			}
 		} else {
-			initIpVisitsNumber(ipTable, ip);
+			initIpVisitsNumber(ipMap, ip);
 		}
-		context.setAttribute("ipTable", ipTable);
+		context.setAttribute("ipMap", ipMap);
 		chain.doFilter(request, response);
 	}
 
@@ -103,18 +108,20 @@ public class IPFilter implements Filter {
 	public void destroy() {
 
 	}
-	
+
 	/**
 	 * @Description 跳转页面
 	 * @author zhangyd
-	 * @date 2016年8月17日 下午5:58:43 
+	 * @date 2016年8月17日 下午5:58:43
 	 * @param request
 	 * @param response
-	 * @param remainingTime 剩余限制时间
+	 * @param remainingTime
+	 *            剩余限制时间
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	private void forward(HttpServletRequest request, HttpServletResponse response, long remainingTime) throws ServletException, IOException{
+	private void forward(HttpServletRequest request, HttpServletResponse response, long remainingTime)
+			throws ServletException, IOException {
 		request.setAttribute("remainingTime", remainingTime);
 		request.getRequestDispatcher("/error/overLimitIP").forward(request, response);
 	}
@@ -127,12 +134,12 @@ public class IPFilter implements Filter {
 	 * @param ip
 	 * @return true : 被限制 | false : 正常
 	 */
-	private boolean isLimitedIP(Hashtable<String, Long> limitedIpTable, String ip) {
-		if (limitedIpTable == null || ip == null) {
+	private boolean isLimitedIP(ConcurrentHashMap<String, Long> limitedIpMap, String ip) {
+		if (limitedIpMap == null || limitedIpMap.isEmpty() || ip == null) {
 			// 没有被限制
 			return false;
 		}
-		return limitedIpTable.containsKey(ip);
+		return limitedIpMap.containsKey(ip);
 	}
 
 	/**
@@ -143,11 +150,11 @@ public class IPFilter implements Filter {
 	 * @param ipMap
 	 * @param ip
 	 */
-	private void initIpVisitsNumber(Hashtable<String, Long[]> ipTable, String ip) {
+	private void initIpVisitsNumber(ConcurrentHashMap<String, Long[]> ipMap, String ip) {
 		Long[] ipInfo = new Long[2];
 		ipInfo[0] = 0L;// 访问次数
 		ipInfo[1] = System.currentTimeMillis();// 初次访问时间
-		ipTable.put(ip, ipInfo);
+		ipMap.put(ip, ipInfo);
 	}
 
 }
