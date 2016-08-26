@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.dao.IMessageDao">
+	<resultMap type="com.test.entity.Message" id="messageMap">
+		<id property="id" column="ID" jdbcType="INTEGER"/>
+		<result property="articleId" column="ARTICLE_ID" jdbcType="VARCHAR"/>
+		<result property="parentId" column="PARENT_ID" jdbcType="VARCHAR"/>
+		<result property="nickName" column="NICK_NAME" jdbcType="VARCHAR"/>
+		<result property="email" column="EMAIL" jdbcType="VARCHAR"/>
+		<result property="webSite" column="WEB_SITE" jdbcType="VARCHAR"/>
+		<result property="content" column="CONTENT" jdbcType="VARCHAR"/>
+		<result property="userId" column="USER_ID" jdbcType="VARCHAR"/>
+		<result property="ip" column="IP" jdbcType="VARCHAR"/>
+		<result property="insertTime" column="INSERT_TIME" jdbcType="TIMESTAMP"/>
+		<result property="replyNumber" column="REPLY_NUMBER" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<select id="queryAll" resultMap="messageMap">
+		SELECT
+			mp.*, ms.replyNumber AS REPLY_NUMBER
+		FROM
+			message mp
+		LEFT JOIN (
+			SELECT
+				PARENT_ID,
+				COUNT(0) replyNumber
+			FROM
+				message ms
+			GROUP BY PARENT_ID
+		) ms ON ms.PARENT_ID = mp.ID
+		WHERE
+			mp.PARENT_ID IS NULL;
+	</select>
+	
+	<select id="querySonByParentId" parameterType="Integer" resultMap="messageMap">
+		SELECT
+			mp.*, ms.replyNumber
+		FROM
+			message mp
+		LEFT JOIN (
+			SELECT
+				PARENT_ID,
+				COUNT(0) replyNumber
+			FROM
+				message ms
+			GROUP BY PARENT_ID
+		) ms ON ms.PARENT_ID = mp.ID
+		WHERE
+			mp.PARENT_ID = #{parentId};
+	</select>
+
+</mapper>

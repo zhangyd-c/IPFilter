@@ -9,6 +9,7 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8"></meta>
 <meta http-equiv="Cache-Control" content="max-age=5000000" />
 <decorator:head />
+<script src="/js/jquery-1.11.1.min.js"></script>
 </head>
 <body>
 	<div style="float: left;width: 23%">
@@ -17,5 +18,6 @@
 	<div style="margin-left: 24%;">
 		<decorator:body />
 	</div>
+    <div class="zhezhao" style="display: none;position: absolute;top: 0;background-color: #a2a2a5;z-index: 1000;filter: alpha(opacity=70); opacity: 0.7;width: 100%;height: 100%;margin: 0;padding: 0"></div>
 </body>
 </html>
